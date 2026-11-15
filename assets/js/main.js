@@ -170,6 +170,10 @@
   function urlFor(key) {
     var direct = (CFG.csv || {})[key];
     if (direct) return direct;
+    var gid = (CFG.gids || {})[key];
+    if (gid != null && String(gid) !== "") {
+      return "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(CFG.sheetId || "") + "/export?format=csv&gid=" + encodeURIComponent(gid);
+    }
     return "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(CFG.sheetId || "") +
       "/gviz/tq?tqx=out:csv&headers=1&sheet=" + encodeURIComponent(TABS[key]);
   }
@@ -249,7 +253,8 @@
       if (!link && /^https?:\/\/\S+$/.test(title)) { link = title; }
       out.push({
         date: parseDate(cell(r, iDate)) || "", title: title, content: content, tag: cell(r, iTag),
-        image: imgUrl(cell(r, iImage)), link: /^https?:\/\//i.test(link) ? link : ""
+        image: imgUrl(cell(r, iImage)), imageLink: /^https?:\/\//i.test(cell(r, iImage)) ? cell(r, iImage) : "",
+        link: /^https?:\/\//i.test(link) ? link : ""
       });
     });
     return out.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
@@ -280,17 +285,26 @@
     box.innerHTML = list.slice(0, 12).map(function (a, i) {
       var age = a.date ? diff(a.date, TODAY) : 99, isNew = age >= 0 && age <= 6;
       var summary = plain(a.content), long = summary.length > 180 || /\[img\]|\n/.test(a.content);
+      var tl = String(a.title || "").split(/\n+/).map(function (x) { return x.trim(); }).filter(Boolean);
+      var heading = tl[0] || "Announcement", subtitle = tl.slice(1).join(" · ");
+      var open = a.link || a.imageLink;
       return '<article class="ann"' + (i >= 3 ? " hidden" : "") + ">" +
         '<div class="ann-top"><span>' + esc(a.tag || "Announcement") + (isNew ? ' <span class="ann-new">New</span>' : "") + "</span>" +
           (a.date ? '<time datetime="' + a.date + '">' + (age === 0 ? "Today" : age === 1 ? "Yesterday" : dShort(a.date) + " " + a.date.slice(0, 4)) + "</time>" : "") + "</div>" +
-        (a.image ? '<img class="cover" src="' + esc(a.image) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' : "") +
-        '<div class="ann-body"><h3>' + esc(a.title || "Announcement") + "</h3>" +
+        (a.image ? (open ? '<a class="cover-link" href="' + esc(open) + '" target="_blank" rel="noopener" aria-label="Open ' + esc(heading) + '">' : "") +
+          '<img class="cover" src="' + esc(a.image) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' + (open ? "</a>" : "") : "") +
+        '<div class="ann-body"><h3>' + esc(heading) + "</h3>" + (subtitle ? '<p class="ann-sub">' + esc(subtitle) + "</p>" : "") +
           (summary ? '<div class="ann-text clamp" data-full="' + esc(richText(a.content)) + '">' + esc(summary) + "</div>" : "") +
-          (long || a.link ? '<div class="ann-actions">' +
+          (long || open ? '<div class="ann-actions">' +
             (long ? '<button class="button" type="button" data-read>Read more</button>' : "") +
-            (a.link ? '<a class="text-link" href="' + esc(a.link) + '" target="_blank" rel="noopener">Open link</a>' : "") + "</div>" : "") +
+            (a.link ? '<a class="text-link" href="' + esc(a.link) + '" target="_blank" rel="noopener">Open link</a>'
+              : a.imageLink ? '<a class="text-link" href="' + esc(a.imageLink) + '" target="_blank" rel="noopener">View full image</a>' : "") + "</div>" : "") +
         "</div></article>";
     }).join("");
+    // a Drive picture that isn't shared publicly would show as a broken image: hide it instead
+    box.querySelectorAll("img").forEach(function (img) {
+      img.addEventListener("error", function () { (img.closest(".cover-link") || img).remove(); });
+    });
     var more = $("[data-ann-more]");
     if (list.length > 3) {
       more.hidden = false;
@@ -307,7 +321,7 @@
     if (!up.length) { box.outerHTML = '<p class="notice">No upcoming dates on the school calendar.</p>'; return; }
     box.innerHTML = up.map(function (r) {
       var n = diff(TODAY, r.start);
-      return '<div class="keydate" style="--kd:var(--c-' + (NAMED[r.color] || "amber") + ')"><span class="swatch"></span>' +
+      return '<div class="keydate" style="--kd:var(--c-' + (NAMED[String(r.color).replace(/\d+$/, "")] || "amber") + ')"><span class="swatch"></span>' +
         '<span class="when-rel">' + (n <= 0 ? "Happening now" : rel(n)) + "</span>" +
         '<span class="name">' + esc(r.title) + '</span><span class="dates">' + range(r.start, r.end) + "</span></div>";
     }).join("");

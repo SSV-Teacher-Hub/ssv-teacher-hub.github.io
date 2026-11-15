@@ -176,6 +176,9 @@ h2 { font: 400 clamp(30px, 3.4vw, 44px)/1.12 var(--serif); color: var(--ink); le
 .ann img.cover { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--card-soft); }
 .ann-body { padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
 .ann h3 { font: 400 23px/1.25 var(--serif); color: var(--ink); }
+.ann-sub { margin-top: -6px; color: #7a6b58; font-size: 14px; }
+.cover-link { display: block; }
+.cover-link:hover img { opacity: .92; }
 .ann-text { color: var(--muted); font-size: 15px; line-height: 1.65; overflow-wrap: anywhere; }
 .ann-text.clamp { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .ann-text a { color: var(--gold-text); }

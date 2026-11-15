@@ -13,24 +13,22 @@ Trang thông tin cho giáo viên và nhân viên Sedbergh Vietnam, cùng phong c
 | **Announcements** | tab `Announcements` (Date, Title, Content, Tag, Public, Image, *Link*) |
 | Resources, FAQ, Who to ask | viết thẳng trong `index.html` — mở file, sửa chữ |
 
-## Kết nối Google Sheet (làm một lần)
+## Kết nối Google Sheet
 
-1. Mở Google Sheet → **File → Share → Publish to web**.
-2. Chọn **Entire document** (hoặc chọn riêng 3 tab Calendar, Event, Announcements) → **Publish**.
-3. Mở trang web. Nếu các mục vẫn báo *Couldn’t load…*, dùng một trong hai cách:
-   - **Share → General access → Anyone with the link → Viewer**, hoặc
-   - Trong hộp thoại Publish to web, chọn từng tab + **Comma-separated values (.csv)**,
-     copy link và dán vào `csv.calendar`, `csv.events`, `csv.announcements` trong `config.js`.
+Trang tải từng tab bằng link xuất CSV của Google (`/export?format=csv&gid=…`), giữ nguyên chữ như trong Sheet.
+Điều kiện duy nhất: Sheet để chia sẻ **Anyone with the link** (hiện đã bật).
 
-Google cập nhật bản đã publish sau khoảng 5 phút, nên chỉnh Sheet xong chờ vài phút là trang tự đổi.
+- `sheetId` và `gids` (mã từng tab) nằm trong `config.js`. Đổi tên tab không sao, nhưng nếu **xoá tab rồi tạo lại**
+  thì gid đổi: mở tab đó, copy số sau `gid=` trên thanh địa chỉ và dán vào `config.js`.
+- Sửa Sheet xong, tải lại trang là thấy ngay.
+- Xem thử với dữ liệu mẫu: thêm `?demo` vào cuối địa chỉ trang.
 
-Muốn xem thử với dữ liệu mẫu: thêm `?demo` vào cuối địa chỉ trang.
+## Lưu ý về Sheet
 
-## Lưu ý khi publish Sheet
-
-- **Ai cũng đọc được các tab đã publish**, kể cả các dòng `Public = FALSE`. Trang web vẫn ẩn những dòng đó,
-  nhưng nếu có bản nháp nhạy cảm thì đừng để chung trong tab Announcements đã publish.
-- CSV chỉ chứa chữ, nên **định dạng trong ô (đậm, màu, link gắn vào chữ) và ảnh chèn trong ô không hiện**. Thay vào đó:
+- **Quan trọng:** link Sheet đang cho phép **Anyone with the link → Editor**. Mã Sheet nằm công khai trong code trang web,
+  nên ai cũng có thể mở và **sửa** Sheet. Nên đổi thành **Viewer**, rồi thêm riêng email các thầy cô cần sửa làm Editor.
+- Ai có link đều đọc được toàn bộ Sheet, kể cả dòng `Public = FALSE` (trang web vẫn ẩn những dòng đó).
+- CSV chỉ chứa chữ, nên **định dạng trong ô (đậm, màu, link gắn vào chữ ở cột Title) và ảnh chèn trong ô không hiện**. Thay vào đó:
   - Ảnh: dán link ảnh vào cột **Image** (link Google Drive cũng được — file phải chia sẻ công khai).
   - Link: dán URL thẳng vào **Content** (tự thành link bấm được), hoặc thêm cột **Link** để có nút *Open link*.
   - Chèn ảnh trong nội dung: `[img]https://...[/img]`.
