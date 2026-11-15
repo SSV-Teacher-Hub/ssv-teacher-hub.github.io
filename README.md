@@ -62,7 +62,12 @@ assets/img/             logo Sedbergh Vietnam
 data/demo/demo.js       dữ liệu mẫu (dùng với ?demo hoặc khi mở file bằng cách bấm đúp)
 ```
 
+**Sửa CSS hoặc JS xong, nhớ tăng số phiên bản** `?v=…` ở các dòng `<link>` / `<script>` trong cả 3 file
+`index.html`, `calendar.html`, `events.html` (ví dụ `?v=20261115` → `?v=20261120`). GitHub Pages cho trình duyệt giữ
+file 10 phút; không đổi số thì người vừa vào trang có thể nhận HTML mới nhưng CSS/JS cũ, và trang hiện lỗi.
+
 ## Bật GitHub Pages
 
 Repo → **Settings → Pages → Build and deployment → Deploy from a branch** → chọn nhánh chứa code
-(ví dụ `main`) và thư mục `/ (root)` → **Save**. Trang sẽ có tại `https://ssv-teacher-hub.github.io/`.
+và thư mục `/ (root)` → **Save**. Trang sẽ có tại `https://ssv-teacher-hub.github.io/`.
+Hiện trang đang build từ nhánh **`redesign-landing-page`** (không phải `main`): muốn cập nhật trang thì đẩy lên nhánh đó.
