@@ -110,7 +110,7 @@ h2 { font: 400 clamp(30px, 3.4vw, 44px)/1.12 var(--serif); color: var(--ink); le
 .today-date { font: 400 clamp(28px, 3vw, 40px)/1.15 var(--serif); color: var(--ink); }
 .today-links { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 40px; }
 .today-week { display: flex; align-items: center; gap: 14px; color: var(--ink); text-decoration: none; }
-.today-week-num { font: 400 clamp(40px, 4vw, 52px)/1 var(--serif); color: var(--gold-text); }
+.today-week-num { position: relative; top: -.065em; font: 400 clamp(40px, 4vw, 52px)/1 var(--serif); font-variant-numeric: lining-nums; color: var(--gold-text); } /* optically centre the digits on the two lines of text */
 .today-week-text strong { display: block; font-size: 15px; font-weight: 600; line-height: 1.35; }
 .today-week-text small { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
 .today-week:hover strong { color: var(--gold-text); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 4px; }
