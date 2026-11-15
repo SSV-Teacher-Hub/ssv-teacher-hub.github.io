@@ -1,5 +1,6 @@
 /* Teacher Hub · Sedbergh Vietnam — shared code for every page
  * Reads the school Google Sheet directly (CSV export) — no Apps Script.
+ * Links attached to words in Announcements cells come from the tab's .xlsx export (see loadCellLinks).
  * Tabs: Calendar (date | title | color | full), Event (Month | Start Date | End Date | Event | Details),
  *       Announcements (Date | Title | Content | Tag | Public | Image [| Link]).
  */
@@ -55,12 +56,14 @@
     if (f !== "" || row.length) { row.push(f); rows.push(row); }
     return rows;
   }
-  // -> { rows: [...], col: function(keywords) -> index }
+  // -> { rows: [...], head: [...], col: function(keywords) -> index }; each row keeps its sheet row number in row.n
   function sheet(text) {
-    var all = parseCSV(text).filter(function (r) { return r.some(function (c) { return c.trim() !== ""; }); });
+    var all = parseCSV(text).map(function (r, i) { r.n = i + 1; return r; })
+      .filter(function (r) { return r.some(function (c) { return c.trim() !== ""; }); });
     var head = (all[0] || []).map(function (h) { return h.trim().toLowerCase(); });
     return {
       rows: all.slice(1),
+      head: head,
       col: function (keys) {
         for (var k = 0; k < keys.length; k++) { var i = head.indexOf(keys[k]); if (i !== -1) return i; }
         for (var k2 = 0; k2 < keys.length; k2++) for (var j = 0; j < head.length; j++) if (head[j] && head[j].indexOf(keys[k2]) !== -1) return j;
@@ -197,6 +200,95 @@
       });
   }
 
+  /* ---------------- links attached to words in a cell ----------------
+     The CSV export keeps only the text of a cell, so links added with Insert → Link are lost. Two other views keep them:
+     - the .xlsx export: every row, but only ONE link per cell (a cell with an English and a Vietnamese link keeps the first);
+     - the HTML view: EVERY link in a cell, but only for rows that aren't hidden in the Sheet.
+     We read both and use the HTML links where we have them.
+     -> { sheetRowNumber: { text: { header: cell text }, links: { header: [{ text, href }] } } } — {} if anything fails. */
+  function unzip(buf) {
+    var u8 = new Uint8Array(buf), dv = new DataView(buf), files = {}, e = u8.length - 22;
+    while (e >= 0 && dv.getUint32(e, true) !== 0x06054b50) e--;
+    if (e < 0) throw new Error("not a zip file");
+    for (var i = 0, p = dv.getUint32(e + 16, true), n = dv.getUint16(e + 10, true); i < n; i++) {
+      var nameLen = dv.getUint16(p + 28, true), off = dv.getUint32(p + 42, true), size = dv.getUint32(p + 20, true);
+      var start = off + 30 + dv.getUint16(off + 26, true) + dv.getUint16(off + 28, true);
+      files[new TextDecoder().decode(u8.subarray(p + 46, p + 46 + nameLen))] = { method: dv.getUint16(p + 10, true), data: u8.slice(start, start + size) };
+      p += 46 + nameLen + dv.getUint16(p + 30, true) + dv.getUint16(p + 32, true);
+    }
+    return {
+      names: Object.keys(files),
+      read: function (name) {
+        var f = files[name];
+        if (!f) return Promise.resolve("");
+        if (f.method === 0) return Promise.resolve(new TextDecoder().decode(f.data));
+        return new Response(new Blob([f.data]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text();
+      }
+    };
+  }
+  function tags(node, t) { return Array.prototype.slice.call(node.getElementsByTagName(t)); }
+  // .xlsx -> { head: { A: "date", … }, text: { B12: "cell text" }, links: { B12: [{ text, href }] } }
+  function readXlsx(buf) {
+    var zip = unzip(buf), ws = zip.names.filter(function (x) { return /^xl\/worksheets\/sheet\d+\.xml$/.test(x); })[0] || "";
+    return Promise.all([zip.read(ws), zip.read(ws.replace("worksheets/", "worksheets/_rels/") + ".rels"), zip.read("xl/sharedStrings.xml")]).then(function (x) {
+      function xml(s) { return new DOMParser().parseFromString(s || "<x/>", "application/xml"); }
+      function texts(node) { return tags(node, "t").map(function (t) { return t.textContent; }).join(""); }
+      var strings = tags(xml(x[2]), "si").map(texts), targets = {}, doc = xml(x[0]), out = { head: {}, text: {}, links: {} };
+      tags(xml(x[1]), "Relationship").forEach(function (r) { targets[r.getAttribute("Id")] = r.getAttribute("Target"); });
+      tags(doc, "c").forEach(function (c) {
+        var v = c.getElementsByTagName("v")[0], is = c.getElementsByTagName("is")[0];
+        out.text[c.getAttribute("r")] = c.getAttribute("t") === "s" && v ? strings[+v.textContent] || "" : is ? texts(is) : v ? v.textContent : "";
+      });
+      Object.keys(out.text).forEach(function (ref) { var m = ref.match(/^([A-Z]+)1$/); if (m) out.head[m[1]] = out.text[ref].trim().toLowerCase(); });
+      tags(doc, "hyperlink").forEach(function (h) {
+        var ref = h.getAttribute("ref") || "", target = targets[h.getAttribute("r:id")] || "", loc = h.getAttribute("location");
+        if (/^[A-Z]+\d+$/.test(ref) && /^https?:\/\//i.test(target)) out.links[ref] = [{ text: out.text[ref] || "", href: target + (loc ? "#" + loc : "") }];
+      });
+      return out;
+    });
+  }
+  // HTML view -> { B313: [{ text, href }, …] } for the rows it shows
+  function readHtmlView(html) {
+    var doc = new DOMParser().parseFromString(html, "text/html"), out = {};
+    var letters = Array.prototype.slice.call(doc.querySelectorAll("thead th")).map(function (th) { return th.textContent.trim(); });
+    Array.prototype.forEach.call(doc.querySelectorAll("tbody tr"), function (tr) {
+      var th = tr.querySelector("th"), n = th ? th.textContent.trim() : "", col = 1;
+      if (!/^\d+$/.test(n)) return;
+      Array.prototype.forEach.call(tr.querySelectorAll("td"), function (td) {
+        var links = Array.prototype.map.call(td.querySelectorAll("a[href]"), function (a) {
+          var href = a.getAttribute("href");
+          try { var u = new URL(href); if (/(^|\.)google\.com$/.test(u.hostname) && u.pathname === "/url") href = u.searchParams.get("q") || href; } catch (e) {}
+          return { text: a.textContent, href: href };
+        }).filter(function (l) { return /^https?:\/\//i.test(l.href); });
+        if (links.length && letters[col]) out[letters[col] + n] = links;
+        col += td.colSpan || 1;
+      });
+    });
+    return out;
+  }
+  function loadCellLinks(key) {
+    var gid = (CFG.gids || {})[key];
+    if (DEMO || FILE || (CFG.csv || {})[key] || gid == null || String(gid) === "" || typeof DecompressionStream === "undefined") return Promise.resolve({});
+    var base = "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(CFG.sheetId || ""), g = encodeURIComponent(gid);
+    function get(url, as) { return fetch(url, { credentials: "omit" }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r[as](); }); }
+    var xlsx = get(base + "/export?format=xlsx&gid=" + g, "arrayBuffer").then(readXlsx);
+    var html = get(base + "/htmlview/sheet?headers=true&gid=" + g, "text").then(readHtmlView).catch(function () { return {}; });
+    var work = Promise.all([xlsx, html]).then(function (x) {
+      var book = x[0], all = Object.assign({}, book.links, x[1]), out = {};
+      Object.keys(all).forEach(function (ref) {
+        var m = ref.match(/^([A-Z]+)(\d+)$/), row = out[m[2]];
+        if (!row) {
+          row = out[m[2]] = { text: {}, links: {} };
+          Object.keys(book.head).forEach(function (L) { row.text[book.head[L]] = book.text[L + m[2]] || ""; });
+        }
+        row.links[book.head[m[1]] || m[1]] = all[ref];
+      });
+      return out;
+    });
+    var timeout = new Promise(function (resolve) { setTimeout(function () { resolve({}); }, 6000); });
+    return Promise.race([work, timeout]).catch(function () { return {}; });
+  }
+
   /* ---------------- shaping ---------------- */
   // one entry per day: { date, title, color, full }
   function readCalendarDays(text) {
@@ -244,22 +336,32 @@
     });
     return out.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
   }
-  function readAnnouncements(text) {
+  function readAnnouncements(text, cellLinks) {
     var t = sheet(text);
     var iDate = t.col(["date", "ngày"]), iTitle = t.col(["title", "tiêu đề"]), iContent = t.col(["content", "nội dung", "body"]),
         iTag = t.col(["tag", "category"]), iPublic = t.col(["public", "show", "hiện"]), iImage = t.col(["image", "ảnh", "picture"]),
         iLink = t.col(["link", "url"]);
+    function squash(s) { return String(s || "").replace(/\s+/g, " ").trim(); }
+    function isUrl(s) { return /^https?:\/\//i.test(s || ""); }
     var out = [];
     t.rows.forEach(function (r) {
       var title = cell(r, iTitle), content = cell(r, iContent);
       if (!title && !content) return;
       if (iPublic !== -1 && !truthy(cell(r, iPublic))) return;
-      var link = cell(r, iLink);
-      if (!link && /^https?:\/\/\S+$/.test(title)) { link = title; }
+      // links attached to the words of Title / Content (only when the exported row really is this row)
+      var x = (cellLinks || {})[r.n], titleKey = t.head[iTitle], contentKey = t.head[iContent];
+      if (x && squash(x.text[titleKey]) !== squash(title)) x = null;
+      var seen = {};
+      function clean(list) {
+        return (list || []).filter(function (l) { var ok = isUrl(l.href) && !seen[l.href]; seen[l.href] = true; return ok; })
+          .map(function (l) { return { text: squash(l.text), href: l.href }; });
+      }
+      var links = clean(isUrl(cell(r, iLink)) ? [{ text: "", href: cell(r, iLink) }] : x && x.links[titleKey]);
+      if (!links.length && /^https?:\/\/\S+$/.test(title)) links = clean([{ text: "", href: title }]);
       out.push({
         date: parseDate(cell(r, iDate)) || "", title: title, content: content, tag: cell(r, iTag),
-        image: imgUrl(cell(r, iImage)), imageLink: /^https?:\/\//i.test(cell(r, iImage)) ? cell(r, iImage) : "",
-        link: /^https?:\/\//i.test(link) ? link : ""
+        image: imgUrl(cell(r, iImage)), imageLink: isUrl(cell(r, iImage)) ? cell(r, iImage) : "",
+        links: links, contentLinks: clean(x && x.links[contentKey])
       });
     });
     return out.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
@@ -308,7 +410,7 @@
     CFG: CFG, TODAY: TODAY, MONTHS: MONTHS, DAYS: DAYS,
     $: $, esc: esc, pad: pad, toDate: toDate, addDays: addDays, diff: diff, wd: wd, dShort: dShort, dLong: dLong, range: range, rel: rel,
     load: load, setSource: setSource, parseCSV: parseCSV, parseDate: parseDate,
-    readCalendarDays: readCalendarDays, readCalendar: readCalendar, readEvents: readEvents, readAnnouncements: readAnnouncements,
+    readCalendarDays: readCalendarDays, readCalendar: readCalendar, readEvents: readEvents, readAnnouncements: readAnnouncements, loadCellLinks: loadCellLinks,
     richText: richText, plain: plain, imgUrl: imgUrl, NAMED: NAMED,
     deptKey: deptKey, deptLabel: deptLabel, deptColor: deptColor, calColor: calColor
   };

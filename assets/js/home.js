@@ -23,40 +23,105 @@
       (n === 1 ? "Event" : "Events") + " in the next 7 days</strong><em>" + dShort(TODAY) + " – " + dShort(end) + "</em></span>";
   }
 
+  // Button labels: one link -> the default label; an English + a Vietnamese link -> "English" / "Tiếng Việt";
+  // otherwise the words the link is attached to.
+  var VI = /[ăâđêôơưàáạảãầấậẩẫằắặẳẵèéẹẻẽềếệểễìíịỉĩòóọỏõồốộổỗờớợởỡùúụủũừứựửữỳýỵỷỹ]/i;
+  function linkLabels(list, single) {
+    if (list.length === 1) return [{ href: list[0].href, label: single }];
+    var langs = list.map(function (l) { return VI.test(l.text) ? "Tiếng Việt" : "English"; });
+    var distinct = langs.filter(function (x, k) { return langs.indexOf(x) === k; }).length === langs.length;
+    return list.map(function (l, k) {
+      var words = l.text.length > 30 ? l.text.slice(0, 28).trim() + "…" : l.text;
+      return { href: l.href, label: distinct ? langs[k] : words || single };
+    });
+  }
+
+  var ANN = { per: 3, page: 1, pages: 1 };
   function renderAnnouncements(list) {
     var box = $("[data-announcements]");
     if (!list.length) { box.innerHTML = '<p class="notice">No announcements right now.</p>'; return; }
-    box.innerHTML = list.slice(0, 12).map(function (a, i) {
+    box.innerHTML = list.map(function (a, i) {
       var age = a.date ? diff(a.date, TODAY) : 99, isNew = age >= 0 && age <= 6;
       var summary = plain(a.content), long = summary.length > 180 || /\[img\]|\n/.test(a.content);
       var tl = String(a.title || "").split(/\n+/).map(function (x) { return x.trim(); }).filter(Boolean);
-      var heading = tl[0] || "Announcement", subtitle = tl.slice(1).join(" · ");
-      var open = a.link || a.imageLink;
-      return '<article class="ann"' + (i >= 3 ? " hidden" : "") + ">" +
+      var heading = tl[0] || "Announcement";
+      var links = a.links || [], contentLinks = a.contentLinks || [], used = [];
+      // each title line opens the link attached to its words (one link over the whole cell -> just the heading)
+      function lineLink(line) {
+        for (var k = 0; k < links.length; k++) {
+          var t = links[k].text;
+          if (used.indexOf(k) === -1 && (!t || t.indexOf(line) !== -1 || line.indexOf(t) !== -1)) { used.push(k); return links[k].href; }
+        }
+        return "";
+      }
+      function linked(text, href) { return href ? '<a href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(text) + "</a>" : esc(text); }
+      var headingHtml = linked(heading, lineLink(heading));
+      var subtitle = tl.slice(1).map(function (line) { return linked(line, links.length > 1 ? lineLink(line) : ""); }).join(" · ");
+      var open = (links[0] || contentLinks[0] || {}).href || a.imageLink;
+      var ext = function (href, label) { return '<a class="text-link" href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(label) + "</a>"; };
+      return '<article class="ann"' + (i >= ANN.per ? " hidden" : "") + ">" +
         '<div class="ann-top"><span>' + esc(a.tag || "Announcement") + (isNew ? ' <span class="ann-new">New</span>' : "") + "</span>" +
           (a.date ? '<time datetime="' + a.date + '">' + (age === 0 ? "Today" : age === 1 ? "Yesterday" : dShort(a.date) + " " + a.date.slice(0, 4)) + "</time>" : "") + "</div>" +
         (a.image ? (open ? '<a class="cover-link" href="' + esc(open) + '" target="_blank" rel="noopener" aria-label="Open ' + esc(heading) + '">' : "") +
           '<img class="cover" src="' + esc(a.image) + '" alt="" loading="lazy" referrerpolicy="no-referrer">' + (open ? "</a>" : "") : "") +
-        '<div class="ann-body"><h3>' + esc(heading) + "</h3>" + (subtitle ? '<p class="ann-sub">' + esc(subtitle) + "</p>" : "") +
+        '<div class="ann-body"><h3>' + headingHtml + "</h3>" +
+          (subtitle ? '<p class="ann-sub">' + subtitle + "</p>" : "") +
           (summary ? '<div class="ann-text clamp" data-full="' + esc(richText(a.content)) + '">' + esc(summary) + "</div>" : "") +
           (long || open ? '<div class="ann-actions">' +
-            (long ? '<button class="button" type="button" data-read>Read more</button>' : "") +
-            (a.link ? '<a class="text-link" href="' + esc(a.link) + '" target="_blank" rel="noopener">Open link</a>'
-              : a.imageLink ? '<a class="text-link" href="' + esc(a.imageLink) + '" target="_blank" rel="noopener">View full image</a>' : "") + "</div>" : "") +
+            (long ? '<button class="text-link ann-read" type="button" data-read>Show more</button>' : "") +
+            linkLabels(links, "Read post").map(function (l) { return ext(l.href, l.label); }).join("") +
+            linkLabels(contentLinks, "Open link").map(function (l) { return ext(l.href, l.label); }).join("") +
+            (!links.length && !contentLinks.length && a.imageLink ? ext(a.imageLink, "View full image") : "") + "</div>" : "") +
         "</div></article>";
     }).join("");
     // a Drive picture that isn't shared publicly would show as a broken image: hide it instead
     box.querySelectorAll("img").forEach(function (img) {
       img.addEventListener("error", function () { (img.closest(".cover-link") || img).remove(); });
     });
-    var more = $("[data-ann-more]");
-    if (list.length > 3) {
-      more.hidden = false;
-      more.querySelector("button").onclick = function () {
-        box.querySelectorAll(".ann[hidden]").forEach(function (el) { el.hidden = false; });
-        more.hidden = true;
-      };
-    }
+    ANN.page = 1;
+    ANN.pages = Math.ceil(list.length / ANN.per);
+    drawPager();
+  }
+
+  // Page numbers to show: all of them when there are few, otherwise 1 … 4 5 6 … 12
+  function pageNumbers(cur, total) {
+    if (total <= 7) return Array.from({ length: total }, function (_, i) { return i + 1; });
+    var from = Math.max(2, Math.min(cur - 1, total - 4)), to = Math.min(total - 1, Math.max(cur + 1, 5));
+    if (from === 3) from = 2;              // never hide a single page behind "…"
+    if (to === total - 2) to = total - 1;
+    var out = [1];
+    if (from > 2) out.push(0);
+    for (var n = from; n <= to; n++) out.push(n);
+    if (to < total - 1) out.push(0);
+    out.push(total);
+    return out;
+  }
+  var CHEV = { prev: "M10 3 5 8l5 5", next: "m6 3 5 5-5 5" };
+  function pagerArrow(dir, target, off) {
+    return '<button class="pager-btn pager-arrow" type="button" data-ann-dir="' + dir + '" data-ann-page="' + target + '"' +
+      ' aria-label="' + (dir === "prev" ? "Previous page" : "Next page") + '"' + (off ? " disabled" : "") + ">" +
+      '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="' + CHEV[dir] + '"/></svg></button>';
+  }
+  function drawPager() {
+    var nav = $("[data-ann-pager]"), p = ANN.page, t = ANN.pages;
+    nav.hidden = t <= 1;
+    if (t <= 1) return;
+    nav.innerHTML = pagerArrow("prev", p - 1, p === 1) +
+      pageNumbers(p, t).map(function (n) {
+        return n === 0 ? '<span class="pager-gap" aria-hidden="true">…</span>'
+          : '<button class="pager-btn" type="button" data-ann-page="' + n + '" aria-label="Page ' + n + '"' + (n === p ? ' aria-current="page"' : "") + ">" + n + "</button>";
+      }).join("") +
+      pagerArrow("next", p + 1, p === t);
+  }
+  function goToPage(n, dir) {
+    ANN.page = Math.min(Math.max(1, n), ANN.pages);
+    var box = $("[data-announcements]");
+    box.querySelectorAll(".ann").forEach(function (el, i) { el.hidden = Math.floor(i / ANN.per) + 1 !== ANN.page; });
+    drawPager();
+    var nav = $("[data-ann-pager]");
+    var focus = (dir && nav.querySelector('[data-ann-dir="' + dir + '"]:not([disabled])')) || nav.querySelector("[aria-current]");
+    if (focus) focus.focus({ preventScroll: true });
+    if (box.getBoundingClientRect().top < 0) $("#announcements").scrollIntoView({ block: "start" });
   }
 
   function renderKeyDates(ranges) {
@@ -115,6 +180,11 @@
 
   /* ---------------- interactions ---------------- */
   document.addEventListener("click", function (e) {
+    var pg = e.target.closest("[data-ann-page]");
+    if (pg) {
+      if (!pg.disabled && !pg.hasAttribute("aria-current")) goToPage(+pg.getAttribute("data-ann-page"), pg.getAttribute("data-ann-dir"));
+      return;
+    }
     var tab = e.target.closest("[data-tab]");
     if (tab) {
       EV.tab = tab.getAttribute("data-tab"); EV.expanded = false;
@@ -128,7 +198,7 @@
       if (text.classList.contains("clamp")) {
         text.dataset.short = text.innerHTML; text.innerHTML = text.getAttribute("data-full"); text.classList.remove("clamp"); read.textContent = "Show less";
       } else {
-        text.innerHTML = text.dataset.short; text.classList.add("clamp"); read.textContent = "Read more";
+        text.innerHTML = text.dataset.short; text.classList.add("clamp"); read.textContent = "Show more";
       }
     }
   });
@@ -144,7 +214,8 @@
       .catch(function () { fail("calendar", "[data-keydates]", "Couldn’t load the school calendar right now."); $("[data-glance-next]").hidden = true; }),
     load("events").then(function (t) { var ev = readEvents(t); renderEvents(ev); renderGlanceWeek(ev); })
       .catch(function () { fail("events", "[data-events]", "Couldn’t load upcoming events right now."); $("[data-glance-week]").hidden = true; }),
-    load("announcements").then(function (t) { renderAnnouncements(readAnnouncements(t)); })
+    Promise.all([load("announcements"), H.loadCellLinks("announcements")])
+      .then(function (x) { renderAnnouncements(readAnnouncements(x[0], x[1])); })
       .catch(function () { fail("announcements", "[data-announcements]", "Couldn’t load announcements right now."); })
   ]).then(function () { H.setSource(failed.length > 0); });
 
