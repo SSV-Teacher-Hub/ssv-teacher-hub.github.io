@@ -3,192 +3,232 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Teacher Hub · SSV</title>
-  <meta name="description" content="Announcements, key dates, quick links and contacts for SSV teachers.">
-  <meta name="theme-color" content="#F7F4EE" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121614" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <title>Teacher Hub · Sedbergh Vietnam</title>
+  <meta name="description" content="Announcements, key dates, resources and contacts for Sedbergh Vietnam teachers and staff.">
+  <meta name="theme-color" content="#776756">
+  <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="icon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <!-- ===== Header ===== -->
+  <!-- ================= Header ================= -->
   <header class="site-header">
-    <div class="wrap header-inner">
-      <a class="brand" href="#top" aria-label="Teacher Hub, back to top">
-        <img src="assets/favicon.svg" alt="" width="34" height="34">
-        <span><strong>Teacher Hub</strong><small>SSV</small></span>
-      </a>
-      <nav class="site-nav" aria-label="Sections">
-        <a href="#news">Announcements</a>
-        <a href="#dates">Key dates</a>
-        <a href="#links">Quick links</a>
-        <a href="#help">Help</a>
-      </nav>
-    </div>
+    <a class="brand" href="#top" aria-label="Teacher Hub, Sedbergh Vietnam">
+      <img src="assets/img/sedbergh-vietnam-white.png" alt="Sedbergh Vietnam" width="134" height="56">
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-name">Teacher Hub</span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections">
+      <a href="#announcements">Announcements</a>
+      <a href="#calendar">Calendar</a>
+      <a href="#resources">Resources</a>
+      <a href="#faq">FAQ</a>
+      <a class="nav-mobile-only" href="#contact">Who to ask</a>
+    </nav>
+    <a class="button header-button" href="#contact">Who to ask</a>
+    <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </header>
 
   <main id="main">
-    <!-- ===== Hero ===== -->
+    <!-- ================= Hero ================= -->
     <section class="hero" id="top">
-      <div class="wrap hero-inner">
-        <div class="hero-copy">
-          <p class="eyebrow">For SSV teachers &amp; staff</p>
-          <h1>Everything you need for the school year, on one page.</h1>
-          <p class="lead">The latest announcements, upcoming dates and the links you use every day. Updated straight from the school office.</p>
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="#news">Read the latest news</a>
-            <a class="btn" href="#dates">See what’s coming up</a>
-          </div>
-        </div>
-        <aside class="today-card" aria-label="Today">
-          <p class="today-label">Today</p>
-          <p class="today-date" data-today>—</p>
-          <div class="today-next" data-next></div>
-        </aside>
+      <h1>Teacher Hub</h1>
+      <p class="hero-sub"><strong>Announcements</strong> <em class="amp">&amp;</em> <strong>key dates</strong> for Sedbergh Vietnam staff</p>
+      <span class="hero-rule" aria-hidden="true"></span>
+      <p class="hero-tagline">Everything you need for the school year, in one place.</p>
+      <div class="hero-actions">
+        <a class="button" href="#announcements">Latest announcements</a>
+        <a class="text-link" href="#calendar">View the calendar</a>
       </div>
     </section>
 
-    <!-- ===== Announcements (from the Announcements tab) ===== -->
-    <section class="section" id="news" aria-labelledby="news-title">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="eyebrow">Announcements</p>
-          <h2 id="news-title">What’s new</h2>
-        </div>
-        <div class="news" data-news>
-          <div class="placeholder"></div><div class="placeholder"></div><div class="placeholder"></div>
-        </div>
-        <div class="more" data-news-more hidden>
-          <button class="btn" type="button">Show older announcements</button>
-        </div>
+    <!-- ================= At a glance (filled from the sheet) ================= -->
+    <section class="glance" aria-label="At a glance">
+      <div class="glance-intro">
+        <p class="eyebrow">Today</p>
+        <p class="glance-date" data-today>&nbsp;</p>
+      </div>
+      <div class="glance-item" data-glance-next>
+        <span class="glance-big">—</span>
+        <span class="glance-text"><small>Next on the school calendar</small><strong>Loading…</strong></span>
+      </div>
+      <div class="glance-item" data-glance-week>
+        <span class="glance-big">—</span>
+        <span class="glance-text"><small>Coming up</small><strong>Events in the next 7 days</strong></span>
       </div>
     </section>
 
-    <!-- ===== Key dates (from the Calendar + Event tabs) ===== -->
-    <section class="section section-alt" id="dates" aria-labelledby="dates-title">
-      <div class="wrap">
-        <div class="section-head">
+    <!-- ================= Announcements (tab: Announcements) ================= -->
+    <section class="band band-deep" id="announcements" aria-labelledby="ann-title">
+      <div class="band-head">
+        <p class="eyebrow">Latest announcements</p>
+        <h2 id="ann-title">What’s new for staff.</h2>
+      </div>
+      <div class="ann-grid" data-announcements>
+        <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      </div>
+      <div class="band-more" data-ann-more hidden>
+        <button class="button button-outline-light" type="button">Show older announcements</button>
+      </div>
+    </section>
+
+    <!-- ================= Key dates (tab: Calendar) ================= -->
+    <section class="band band-panel" id="calendar" aria-labelledby="cal-title">
+      <div class="split-head">
+        <div>
           <p class="eyebrow">School calendar</p>
-          <h2 id="dates-title">Key dates</h2>
-          <p class="section-sub">Holidays, PD days and what’s happening around school in the coming weeks.</p>
+          <h2 id="cal-title">Key dates ahead.</h2>
         </div>
-        <div class="keydates" data-keydates></div>
-        <div class="timeline" data-events>
-          <div class="placeholder tall"></div>
-        </div>
-        <div class="more" data-events-more hidden>
-          <button class="btn" type="button">Show more dates</button>
-        </div>
+        <p class="split-lead">Holidays, PD days and school-wide dates, straight from the school calendar.</p>
+      </div>
+      <div class="keydates" data-keydates>
+        <div class="skeleton short"></div>
       </div>
     </section>
 
-    <!-- ===== Quick links =====
-         Sửa danh sách link ngay tại đây: mỗi thẻ <a class="link-card"> là một link.
-         Đổi href, tên, mô tả và emoji cho đúng với trường. -->
-    <section class="section" id="links" aria-labelledby="links-title">
-      <div class="wrap">
-        <div class="section-head">
-          <p class="eyebrow">Quick links</p>
-          <h2 id="links-title">The tools you use every day</h2>
-        </div>
-        <div class="links">
-          <a class="link-card" href="https://classroom.google.com" target="_blank" rel="noopener">
-            <span class="link-icon" aria-hidden="true">🎓</span>
-            <span><strong>Google Classroom</strong><small>Classes, assignments and feedback</small></span>
-          </a>
-          <a class="link-card" href="https://mail.google.com" target="_blank" rel="noopener">
-            <span class="link-icon" aria-hidden="true">✉️</span>
-            <span><strong>School email</strong><small>Gmail with your school account</small></span>
-          </a>
-          <a class="link-card" href="https://drive.google.com" target="_blank" rel="noopener">
-            <span class="link-icon" aria-hidden="true">📁</span>
-            <span><strong>Shared drive</strong><small>Lesson plans and department files</small></span>
-          </a>
-          <a class="link-card" href="https://calendar.google.com" target="_blank" rel="noopener">
-            <span class="link-icon" aria-hidden="true">📅</span>
-            <span><strong>Google Calendar</strong><small>Meetings, duties and room bookings</small></span>
-          </a>
-          <a class="link-card" href="https://forms.google.com" target="_blank" rel="noopener">
-            <span class="link-icon" aria-hidden="true">📝</span>
-            <span><strong>Leave request</strong><small>Submit at least 3 working days ahead</small></span>
-          </a>
-          <a class="link-card" href="https://forms.google.com" target="_blank" rel="noopener">
-            <span class="link-icon" aria-hidden="true">🛠️</span>
-            <span><strong>IT support</strong><small>Laptops, projectors and accounts</small></span>
-          </a>
-        </div>
+    <!-- ================= Upcoming events (tab: Event) ================= -->
+    <section class="band band-sand" id="events" aria-labelledby="ev-title">
+      <div class="band-head">
+        <p class="eyebrow">What’s on</p>
+        <h2 id="ev-title">Upcoming events.</h2>
+      </div>
+      <div class="tabs" role="tablist" aria-label="Choose a month" data-ev-tabs></div>
+      <div class="ev-list" data-events>
+        <div class="skeleton tall"></div>
+      </div>
+      <div class="band-more" data-ev-more hidden>
+        <button class="button button-outline" type="button">Show more dates</button>
       </div>
     </section>
 
-    <!-- ===== Help: contacts + FAQ =====
-         Sửa tên, email, số máy lẻ và câu hỏi ngay tại đây. -->
-    <section class="section section-alt" id="help" aria-labelledby="help-title">
-      <div class="wrap help">
-        <div>
-          <div class="section-head">
-            <p class="eyebrow">Help</p>
-            <h2 id="help-title">Who to ask</h2>
-          </div>
-          <ul class="contacts">
-            <li>
-              <strong>Academic Office</strong>
-              <span>Timetables, cover, exams</span>
-              <a href="mailto:academic@your-school.edu.vn">academic@your-school.edu.vn</a>
-            </li>
-            <li>
-              <strong>Student Development Office</strong>
-              <span>Assemblies, house events, trips</span>
-              <a href="mailto:sdo@your-school.edu.vn">sdo@your-school.edu.vn</a>
-            </li>
-            <li>
-              <strong>Human Resources</strong>
-              <span>Contracts, leave, payroll</span>
-              <a href="mailto:hr@your-school.edu.vn">hr@your-school.edu.vn</a>
-            </li>
-            <li>
-              <strong>IT Support</strong>
-              <span>Devices, Wi-Fi, accounts</span>
-              <a href="mailto:it@your-school.edu.vn">it@your-school.edu.vn</a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <div class="section-head">
-            <p class="eyebrow">FAQ</p>
-            <h2>Common questions</h2>
-          </div>
-          <div class="faq">
-            <details>
-              <summary>How do I request leave?</summary>
-              <p>Fill in the leave request form at least 3 working days before. Your line manager approves it by email and the Academic Office arranges cover.</p>
-            </details>
-            <details>
-              <summary>I’m sick today. What should I do?</summary>
-              <p>Message your line manager and the Academic Office before 7:00 AM, and upload cover work to your class folder if you can.</p>
-            </details>
-            <details>
-              <summary>When are lesson plans due?</summary>
-              <p>Weekly plans go into the shared drive by Friday 4:00 PM for the following week.</p>
-            </details>
-            <details>
-              <summary>Something in my classroom is broken.</summary>
-              <p>Send an IT support request with your room number. If a lesson starts in under 15 minutes, call IT directly.</p>
-            </details>
-          </div>
-        </div>
+    <!-- ================= Resources =================
+         Sửa link tại đây: mỗi thẻ <a class="resource"> là một link.
+         Đổi href, tên (h3) và mô tả (p) cho đúng với trường. -->
+    <section class="band band-paper" id="resources" aria-labelledby="res-title">
+      <div class="band-head">
+        <p class="eyebrow">Staff resources</p>
+        <h2 id="res-title">The tools you use every day.</h2>
+      </div>
+      <div class="resources">
+        <a class="resource" href="https://classroom.google.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 5l9 4.5-9 4.5z"/><path d="M7 11.5V16c1.5 1.4 3.2 2 5 2s3.5-.6 5-2v-4.5M21 9.5V15"/></svg>
+          <h3>Google Classroom</h3>
+          <p>Classes, assignments and feedback.</p>
+          <span class="text-link">Open</span>
+        </a>
+        <a class="resource" href="https://mail.google.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg>
+          <h3>School email</h3>
+          <p>Gmail with your school account.</p>
+          <span class="text-link">Open</span>
+        </a>
+        <a class="resource" href="https://drive.google.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/></svg>
+          <h3>Shared drive</h3>
+          <p>Lesson plans and department folders.</p>
+          <span class="text-link">Open</span>
+        </a>
+        <a class="resource" href="https://calendar.google.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="1"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>
+          <h3>Google Calendar</h3>
+          <p>Meetings, duties and room bookings.</p>
+          <span class="text-link">Open</span>
+        </a>
+        <a class="resource" href="https://forms.google.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M14.5 3.5V7.5h4M9 12h6M9 15.5h6"/></svg>
+          <h3>Leave request</h3>
+          <p>Submit at least 3 working days ahead.</p>
+          <span class="text-link">Open</span>
+        </a>
+        <a class="resource" href="https://forms.google.com" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5a4 4 0 0 0-5 5L4 16l4 4 5.5-5.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg>
+          <h3>IT support</h3>
+          <p>Laptops, projectors and accounts.</p>
+          <span class="text-link">Open</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ================= FAQ =================
+         Sửa câu hỏi / câu trả lời tại đây. -->
+    <section class="band band-panel faq" id="faq" aria-labelledby="faq-title">
+      <div class="faq-intro">
+        <p class="eyebrow">FAQ</p>
+        <h2 id="faq-title">Frequently<br>asked questions</h2>
+        <p>Quick answers to the questions new and returning staff ask most often.</p>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>How do I request leave?</summary>
+          <p>Fill in the leave request form at least 3 working days before. Your line manager approves it by email and the Academic Office arranges cover.</p>
+        </details>
+        <details>
+          <summary>I’m unwell today. What should I do?</summary>
+          <p>Message your line manager and the Academic Office before 7:00 AM, and upload cover work to your class folder if you can.</p>
+        </details>
+        <details>
+          <summary>When are lesson plans due?</summary>
+          <p>Weekly plans go into the shared drive by Friday 4:00 PM for the following week.</p>
+        </details>
+        <details>
+          <summary>Where do I find exam weeks and PD days?</summary>
+          <p>All key dates are in the calendar on this page. They come straight from the school calendar, so they are always up to date.</p>
+        </details>
+        <details>
+          <summary>Something in my classroom isn’t working.</summary>
+          <p>Send an IT support request with your room number. If your lesson starts in under 15 minutes, call IT directly.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- ================= Contacts =================
+         Sửa tên bộ phận, email và số máy lẻ tại đây. -->
+    <section class="band band-sand contact" id="contact" aria-labelledby="contact-title">
+      <div class="contact-intro">
+        <p class="eyebrow">Need help?</p>
+        <h2 id="contact-title">Who to ask.</h2>
+        <p>Not sure who handles what? Start with the right team below and they will point you in the right direction.</p>
+      </div>
+      <div class="contact-card">
+        <h3>Key contacts</h3>
+        <dl>
+          <div><dt>Academic Office</dt><dd>Timetables, cover, exams</dd><dd><a href="mailto:academic@your-school.edu.vn">academic@your-school.edu.vn</a></dd></div>
+          <div><dt>Student Development Office</dt><dd>Assemblies, house events, trips</dd><dd><a href="mailto:sdo@your-school.edu.vn">sdo@your-school.edu.vn</a></dd></div>
+          <div><dt>Human Resources</dt><dd>Contracts, leave, payroll</dd><dd><a href="mailto:hr@your-school.edu.vn">hr@your-school.edu.vn</a></dd></div>
+          <div><dt>IT Support</dt><dd>Devices, Wi-Fi, accounts</dd><dd><a href="mailto:it@your-school.edu.vn">it@your-school.edu.vn</a></dd></div>
+        </dl>
       </div>
     </section>
   </main>
 
+  <!-- ================= Footer ================= -->
   <footer class="site-footer">
-    <div class="wrap footer-inner">
-      <span>© <span data-year></span> SSV Teacher Hub</span>
-      <span class="muted" data-updated></span>
+    <div class="footer-head">
+      <p class="footer-title">Teacher Hub</p>
+      <p class="footer-sub">Staff information · Sedbergh Vietnam</p>
+      <address>No 86, Road 23, Phu My Hung, Tan My Ward, HCMC</address>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="#announcements">Announcements</a>
+      <a href="#calendar">Calendar</a>
+      <a href="#resources">Resources</a>
+      <a href="#contact">Who to ask</a>
+    </nav>
+    <div class="footer-accreditations">
+      <img src="assets/img/sedbergh-accreditations-negative.png" alt="Sedbergh Vietnam accreditations" width="1046" height="120" loading="lazy">
+    </div>
+    <div class="footer-meta">
+      <span>© <span data-year>2026</span> Sedbergh Vietnam · Teacher Hub</span>
+      <span data-source></span>
+      <a href="#top">Back to top</a>
     </div>
   </footer>
 

@@ -1,40 +1,53 @@
-# SSV Teacher Hub
+# Teacher Hub · Sedbergh Vietnam
 
-Trang thông tin một trang (landing page) cho giáo viên SSV, chạy trên GitHub Pages.
+Trang thông tin cho giáo viên và nhân viên Sedbergh Vietnam, cùng phong cách với
+[Centre of Excellence](https://coe-ssv.github.io/). Trang tĩnh, chạy thẳng trên GitHub Pages,
+**không cần Apps Script**: thông báo, lịch và sự kiện được đọc trực tiếp từ Google Sheet.
 
-- **Announcements** và **Key dates** tự lấy từ Google Sheet (3 tab sẵn có: `Calendar`, `Event`, `Announcements`).
-- **Quick links**, **Who to ask** và **FAQ** viết thẳng trong `index.html` — mở file, sửa chữ là xong.
+## Nội dung lấy từ đâu
+
+| Phần trên trang | Nguồn |
+|---|---|
+| Today / số ngày đến mốc tiếp theo, **Key dates** | tab `Calendar` (date, title, color, full) |
+| **Upcoming events** | tab `Event` (Month, Start Date, End Date, Event, Details) |
+| **Announcements** | tab `Announcements` (Date, Title, Content, Tag, Public, Image, *Link*) |
+| Resources, FAQ, Who to ask | viết thẳng trong `index.html` — mở file, sửa chữ |
+
+## Kết nối Google Sheet (làm một lần)
+
+1. Mở Google Sheet → **File → Share → Publish to web**.
+2. Chọn **Entire document** (hoặc chọn riêng 3 tab Calendar, Event, Announcements) → **Publish**.
+3. Mở trang web. Nếu các mục vẫn báo *Couldn’t load…*, dùng một trong hai cách:
+   - **Share → General access → Anyone with the link → Viewer**, hoặc
+   - Trong hộp thoại Publish to web, chọn từng tab + **Comma-separated values (.csv)**,
+     copy link và dán vào `csv.calendar`, `csv.events`, `csv.announcements` trong `config.js`.
+
+Google cập nhật bản đã publish sau khoảng 5 phút, nên chỉnh Sheet xong chờ vài phút là trang tự đổi.
+
+Muốn xem thử với dữ liệu mẫu: thêm `?demo` vào cuối địa chỉ trang.
+
+## Lưu ý khi publish Sheet
+
+- **Ai cũng đọc được các tab đã publish**, kể cả các dòng `Public = FALSE`. Trang web vẫn ẩn những dòng đó,
+  nhưng nếu có bản nháp nhạy cảm thì đừng để chung trong tab Announcements đã publish.
+- CSV chỉ chứa chữ, nên **định dạng trong ô (đậm, màu, link gắn vào chữ) và ảnh chèn trong ô không hiện**. Thay vào đó:
+  - Ảnh: dán link ảnh vào cột **Image** (link Google Drive cũng được — file phải chia sẻ công khai).
+  - Link: dán URL thẳng vào **Content** (tự thành link bấm được), hoặc thêm cột **Link** để có nút *Open link*.
+  - Chèn ảnh trong nội dung: `[img]https://...[/img]`.
+- Ngày trong tab Event có thể lẫn DD/MM và MM/DD; trang dùng cột **Month** để đọc đúng (giống code cũ).
 
 ## Cấu trúc
 
 ```
-index.html            nội dung trang (sửa link, liên hệ, FAQ ở đây)
-config.js             apiUrl + màu/nhãn bộ phận
-assets/css/style.css  giao diện
-assets/js/main.js     đọc dữ liệu từ Sheet và hiển thị
-data/demo.js          nội dung mẫu, chỉ dùng khi apiUrl để trống
-apps-script/Code.gs   backend Apps Script (bản cập nhật của code cũ)
+index.html              nội dung trang (sửa Resources, FAQ, Who to ask ở đây)
+config.js               ID Sheet, tên tab, link CSV, màu/nhãn bộ phận
+assets/css/style.css    giao diện (màu, font theo trang COE)
+assets/js/main.js       đọc CSV từ Sheet và hiển thị
+assets/img/             logo Sedbergh Vietnam
+data/demo/*.csv         dữ liệu mẫu cho ?demo
 ```
 
-## Kết nối Google Sheet (làm một lần)
+## Bật GitHub Pages
 
-1. Mở project Apps Script hiện tại, thay nội dung `Code.gs` bằng file `apps-script/Code.gs`.
-   Trang HTML cũ (Index.html) vẫn chạy như trước — chỉ thêm chế độ `?format=json`.
-2. **Deploy → Manage deployments →** bút chì **Edit → Version: New version → Deploy**.
-   Mục **Who has access** phải là **Anyone**.
-3. Copy URL web app (kết thúc bằng `/exec`), dán vào `apiUrl` trong `config.js`.
-4. Kiểm tra: mở `URL/exec?format=json` trên trình duyệt, phải thấy dữ liệu dạng `{"ok":true,...}`.
-
-Trong Apps Script đã sửa thêm: tách ghi chú (dòng 2 trở đi trong ô Event) để hiện dưới tên sự kiện,
-và khi dữ liệu vượt giới hạn cache 100KB thì vẫn trả dữ liệu thay vì mất cả danh sách.
-
-## Đưa lên GitHub Pages
-
-1. Đẩy toàn bộ file lên nhánh `main` của repo `ssv-teacher-hub.github.io`.
-2. Repo → **Settings → Pages → Source: Deploy from a branch → `main` / root**.
-3. Trang sẽ có tại `https://ssv-teacher-hub.github.io/`.
-
-## Lưu ý
-
-- Trang GitHub Pages ai cũng xem được. Thông báo chỉ hiện khi cột **Public = TRUE** (giống trang cũ).
-- Nhớ thay các email mẫu `@your-school.edu.vn` trong phần **Who to ask** bằng email thật.
+Repo → **Settings → Pages → Build and deployment → Deploy from a branch** → chọn nhánh chứa code
+(ví dụ `main`) và thư mục `/ (root)` → **Save**. Trang sẽ có tại `https://ssv-teacher-hub.github.io/`.
