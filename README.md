@@ -66,6 +66,16 @@ data/demo/demo.js       dữ liệu mẫu (dùng với ?demo hoặc khi mở fil
 `index.html`, `calendar.html`, `events.html` (ví dụ `?v=20261115` → `?v=20261120`). GitHub Pages cho trình duyệt giữ
 file 10 phút; không đổi số thì người vừa vào trang có thể nhận HTML mới nhưng CSS/JS cũ, và trang hiện lỗi.
 
+## Nhúng vào Google Sites
+
+Google Sites → **Insert → Embed → By URL** → dán `https://ssv-teacher-hub.github.io/` → chọn **Whole page** → Insert.
+
+- Trang tự nhận ra đang nằm trong khung nhúng và chuyển sang **bản gọn**: bỏ thanh menu nâu và chân trang
+  (Google Site đã có), ba trang thành tab nhẹ ở trên cùng, tiêu đề và khoảng cách nhỏ lại.
+  Mở thẳng trang (không qua khung) thì vẫn là bản đầy đủ như cũ.
+- Khung nhúng trong Google Sites có chiều cao cố định: **kéo khung cao lên** (cạnh dưới của khung) để ít phải cuộn bên trong.
+- Xem thử bản gọn mà không cần Google Sites: thêm `?embed` vào cuối địa chỉ, ví dụ `index.html?embed`.
+
 ## Bật GitHub Pages
 
 Repo → **Settings → Pages → Build and deployment → Deploy from a branch** → chọn nhánh chứa code

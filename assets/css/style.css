@@ -425,3 +425,48 @@ body[data-page="events"] .cal-cell { min-height: 118px; }
   .dots { display: flex; flex-wrap: wrap; }
   .cal-today { padding: 8px 12px; }
 }
+
+/* =========================================================
+   Embedded in a Google Site (any frame) — html.embed, set by the script in <head>
+   The Google Site already has a menu, a header and a footer: drop our brown bar and footer,
+   keep the three pages as light tabs, and tighten everything so there is less scrolling in the frame.
+   ========================================================= */
+html.embed { --sec-x: clamp(20px, 4vw, 40px); --sec-y: clamp(32px, 4vw, 48px); scroll-padding-top: 16px; }
+
+.embed .site-header { position: static; height: auto; padding: 8px var(--sec-x) 0; gap: 0; background: var(--paper); color: var(--ink); border-bottom: 1px solid var(--line); }
+.embed .site-nav { display: flex; position: static; flex-direction: row; gap: 4px; margin: 0; padding: 0; background: none; border: 0; overflow: auto hidden; scrollbar-width: none; }
+.embed .site-nav a { flex: none; padding: 10px 14px 11px; border-bottom: 2px solid transparent; color: var(--muted); font-size: 14px; font-weight: 600; text-decoration: none; }
+.embed .site-nav a:first-child { padding-left: 0; }
+.embed .site-nav a:hover { color: var(--ink); }
+.embed .site-nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--gold); text-decoration: none; }
+.embed .menu-toggle, .embed .site-footer { display: none; }
+
+.embed h2 { font-size: clamp(24px, 2.6vw, 32px); }
+.embed .band-head { margin-bottom: 24px; }
+.embed .band-deep { border-bottom-width: 3px; }
+.embed .today { padding-top: 26px; padding-bottom: 32px; }
+.embed .today-date { font-size: clamp(24px, 2.6vw, 32px); }
+.embed .today-head { margin-bottom: 22px; }
+.embed .keydate { padding: 18px 20px 20px; gap: 4px; }
+.embed .keydate .when-rel { font-size: 22px; }
+.embed .keydate .name { font-size: 15px; }
+.embed .ann-top { padding: 12px 18px; font-size: 11px; }
+.embed .ann-body { padding: 16px 18px 18px; gap: 10px; }
+.embed .ann h3 { font-size: 19px; }
+.embed .ann-actions { gap: 10px 20px; padding-top: 12px; }
+@media (min-width: 641px) { /* the frame is narrower than a browser window: keep the four dates and a page of three posts in one row */
+  .embed .keydates { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .embed .keydate:nth-child(n) { border-top: 0; border-left: 1px solid var(--line); }
+  .embed .keydate:first-child { border-left: 0; }
+  .embed .ann-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+}
+
+/* School Calendar / School Events: a light title row instead of the big dark banner */
+.embed .page-hero { text-align: left; padding: 24px var(--sec-x) 22px; background: var(--grain-light), var(--parchment); color: var(--ink); border-bottom: 0; }
+.embed .page-hero .eyebrow { color: var(--gold-text); margin-bottom: 8px; }
+.embed .page-hero h1 { font-size: clamp(26px, 3vw, 34px); }
+.embed .page-hero-sub { margin-top: 6px; color: var(--muted); font-size: 14px; }
+.embed .cal-page { padding-top: 28px; }
+.embed .cal-side { top: 16px; }
+.embed .ev-month { margin-top: 36px; }
+.embed .ev-day { scroll-margin-top: 16px; }
