@@ -154,8 +154,20 @@
   }
 
   /* ---------------- loading ---------------- */
+  var FILE = location.protocol === "file:";
+  var demoUsed = false;
+  function demoText(key) {
+    demoUsed = true;
+    if (window.HUB_DEMO_CSV) return Promise.resolve(window.HUB_DEMO_CSV[key]);
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "data/demo/demo.js";
+      s.onload = function () { window.HUB_DEMO_CSV ? resolve(window.HUB_DEMO_CSV[key]) : reject(new Error("no demo data")); };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
   function urlFor(key) {
-    if (DEMO) return "data/demo/" + key + ".csv";
     var direct = (CFG.csv || {})[key];
     if (direct) return direct;
     return "https://docs.google.com/spreadsheets/d/" + encodeURIComponent(CFG.sheetId || "") +
@@ -164,17 +176,19 @@
   var offline = false;
   function load(key) {
     var store = "ssvhub:csv:" + key;
+    if (DEMO) return demoText(key);
     return fetch(urlFor(key), { credentials: "omit" })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
       .then(function (t) {
         if (/^\s*</.test(t)) throw new Error("Not CSV — is the sheet published?");
-        if (!DEMO) try { localStorage.setItem(store, t); } catch (e) {}
+        try { localStorage.setItem(store, t); } catch (e) {}
         return t;
       })
       .catch(function (err) {
         var saved = null;
         try { saved = localStorage.getItem(store); } catch (e) {}
         if (saved) { offline = true; return saved; }
+        if (FILE) return demoText(key); // opened by double-click: show the sample data instead of errors
         throw err;
       });
   }
@@ -386,7 +400,7 @@
     load("announcements").then(function (t) { renderAnnouncements(readAnnouncements(t)); })
       .catch(function () { fail("announcements", "[data-announcements]", "Couldn’t load announcements right now."); })
   ]).then(function () {
-    $("[data-source]").textContent = DEMO ? "Sample data (demo mode)"
+    $("[data-source]").textContent = demoUsed ? "Sample data (demo mode)"
       : failed.length ? "Some content couldn’t be loaded"
       : offline ? "Offline — showing the last saved copy"
       : "Live from the school calendar sheet";

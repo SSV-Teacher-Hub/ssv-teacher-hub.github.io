@@ -44,7 +44,7 @@ config.js               ID Sheet, tên tab, link CSV, màu/nhãn bộ phận
 assets/css/style.css    giao diện (màu, font theo trang COE)
 assets/js/main.js       đọc CSV từ Sheet và hiển thị
 assets/img/             logo Sedbergh Vietnam
-data/demo/*.csv         dữ liệu mẫu cho ?demo
+data/demo/demo.js       dữ liệu mẫu (dùng với ?demo hoặc khi mở file bằng cách bấm đúp)
 ```
 
 ## Bật GitHub Pages
