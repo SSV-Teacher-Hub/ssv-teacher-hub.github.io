@@ -104,23 +104,16 @@ h2 { font: 400 clamp(30px, 3.4vw, 44px)/1.12 var(--serif); color: var(--ink); le
 .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
 .menu-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ---------- at a glance strip ---------- */
-.glance {
-  display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr); align-items: stretch;
-  padding: clamp(40px, 4.7vw, 56px) var(--sec-x);
-  background: var(--grain-light), var(--parchment);
-}
-.glance-intro { padding-right: 32px; align-self: center; }
-.glance-date { font: 400 clamp(28px, 3vw, 40px)/1.15 var(--serif); color: var(--ink); }
-.glance-item {
-  display: flex; align-items: center; gap: 18px;
-  padding: 6px clamp(16px, 2.5vw, 36px); border-left: 1px solid var(--gold-line);
-  color: var(--ink); text-decoration: none;
-}
-.glance-big { font: 400 clamp(46px, 5vw, 64px)/1 var(--serif); color: var(--gold-text); flex: none; }
-.glance-text small { display: block; color: #7a6b58; font-size: 12px; font-weight: 500; margin-bottom: 4px; letter-spacing: .02em; }
-.glance-text strong { display: block; font-size: 16px; font-weight: 600; line-height: 1.35; }
-.glance-text em { display: block; font-style: normal; font-size: 14px; color: var(--muted); margin-top: 2px; }
+/* ---------- today + key dates ---------- */
+.today { background: var(--grain-light), var(--parchment); padding-top: clamp(40px, 4.7vw, 56px); padding-bottom: clamp(44px, 5vw, 64px); }
+.today-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 48px; margin-bottom: 30px; }
+.today-date { font: 400 clamp(28px, 3vw, 40px)/1.15 var(--serif); color: var(--ink); }
+.today-links { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 40px; }
+.today-week { display: flex; align-items: center; gap: 14px; color: var(--ink); text-decoration: none; }
+.today-week-num { font: 400 clamp(40px, 4vw, 52px)/1 var(--serif); color: var(--gold-text); }
+.today-week-text strong { display: block; font-size: 15px; font-weight: 600; line-height: 1.35; }
+.today-week-text small { display: block; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.today-week:hover strong { color: var(--gold-text); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 4px; }
 
 /* ---------- section bands ---------- */
 .band { padding: var(--sec-y) var(--sec-x); }
@@ -132,8 +125,6 @@ h2 { font: 400 clamp(30px, 3.4vw, 44px)/1.12 var(--serif); color: var(--ink); le
 .band-paper { background: var(--paper); }
 .band-head { margin-bottom: 38px; max-width: 720px; }
 .band-more { display: flex; justify-content: center; margin-top: 36px; }
-.split-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px 64px; align-items: end; margin-bottom: 38px; }
-.split-lead { color: var(--muted); font-size: 16px; max-width: 460px; }
 
 /* ---------- announcements ---------- */
 .ann-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; align-items: stretch; }
@@ -262,9 +253,6 @@ h2 { font: 400 clamp(30px, 3.4vw, 44px)/1.12 var(--serif); color: var(--ink); le
   .keydates { grid-template-columns: 1fr 1fr; }
   .keydate:nth-child(3) { border-left: 0; }
   .keydate:nth-child(n+3) { border-top: 1px solid var(--line); }
-  .glance { grid-template-columns: 1fr 1fr; row-gap: 26px; }
-  .glance-intro { grid-column: 1 / -1; }
-  .glance-item:nth-child(2) { border-left: 0; padding-left: 0; }
 }
 @media (max-width: 900px) {
   .site-header { gap: 14px; padding: 0 6%; }
@@ -276,7 +264,6 @@ h2 { font: 400 clamp(30px, 3.4vw, 44px)/1.12 var(--serif); color: var(--ink); le
   }
   .site-nav.open { display: flex; }
   .site-nav a { font-size: 16px; }
-  .split-head { grid-template-columns: 1fr; }
   .quick-list { grid-template-columns: 1fr 1fr; }
   .ev-day { grid-template-columns: 1fr; }
   .ev-day-head { padding: 18px 20px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; }
@@ -288,10 +275,8 @@ h2 { font: 400 clamp(30px, 3.4vw, 44px)/1.12 var(--serif); color: var(--ink); le
   html { scroll-padding-top: 76px; }
   .site-header { height: 76px; }
   .site-nav { top: 76px; }
-  .glance { grid-template-columns: 1fr; row-gap: 0; padding-top: 34px; padding-bottom: 34px; }
-  .glance-intro { padding: 0 0 18px; }
-  .glance-item { border-left: 0; border-top: 1px solid var(--gold-line); padding: 18px 0; }
-  .glance-item:nth-child(2) { padding-left: 0; }
+  .today { padding-top: 34px; padding-bottom: 40px; }
+  .today-head { margin-bottom: 24px; }
   .ann-grid, .keydates { grid-template-columns: 1fr; }
   .keydate { border-left: 0; border-top: 1px solid var(--line); }
   .keydate:first-child { border-top: 0; }
@@ -311,7 +296,7 @@ h2 { font: 400 clamp(30px, 3.4vw, 44px)/1.12 var(--serif); color: var(--ink); le
    School Calendar / School Events pages
    ========================================================= */
 .site-nav a[aria-current="page"] { color: #f0dcb4; text-decoration: underline; text-decoration-color: var(--gold-hi); text-underline-offset: 8px; text-decoration-thickness: 2px; }
-.split-link, .band-link { display: inline-block; margin-top: 14px; }
+.band-link { display: inline-block; margin-top: 14px; }
 
 .page-hero {
   text-align: center; color: #f7f1e6;

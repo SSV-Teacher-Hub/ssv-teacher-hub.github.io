@@ -16,7 +16,7 @@ Có thể mở thẳng một tháng: `calendar.html#2027-02`.
 
 | Phần trên trang | Nguồn |
 |---|---|
-| Today / số ngày đến mốc tiếp theo, **Key dates** | tab `Calendar` (date, title, color, full) |
+| **Today** + 4 **key dates** sắp tới (phần đầu trang) | tab `Calendar` (date, title, color, full); số sự kiện 7 ngày tới lấy từ tab `Event` |
 | **Upcoming events** | tab `Event` (Month, Start Date, End Date, Event, Details) |
 | **Announcements** | tab `Announcements` (Date, Title, Content, Tag, Public, Image, *Link*) |
 | **Quick Access** | viết thẳng trong `index.html` — mở file, sửa link |

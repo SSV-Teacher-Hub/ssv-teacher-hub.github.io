@@ -7,20 +7,13 @@
   var richText = H.richText, plain = H.plain, deptLabel = H.deptLabel, NAMED = H.NAMED;
 
   /* ---------------- rendering ---------------- */
-  function renderGlanceNext(ranges) {
-    var box = $("[data-glance-next]");
-    var next = ranges.filter(function (r) { return r.end >= TODAY; })[0];
-    if (!next) { box.innerHTML = '<span class="glance-big">—</span><span class="glance-text"><small>Next on the school calendar</small><strong>Nothing scheduled</strong></span>'; return; }
-    var n = diff(TODAY, next.start);
-    box.innerHTML = n <= 0
-      ? '<span class="glance-big">Now</span><span class="glance-text"><small>On the school calendar</small><strong>' + esc(next.title) + "</strong><em>" + (next.end !== next.start ? "Until " + wd(next.end) + " " + dShort(next.end) : "Today") + "</em></span>"
-      : '<span class="glance-big">' + n + '</span><span class="glance-text"><small>' + (n === 1 ? "Day" : "Days") + " until</small><strong>" + esc(next.title) + "</strong><em>" + range(next.start, next.end) + "</em></span>";
-  }
-  function renderGlanceWeek(events) {
-    var end = addDays(TODAY, 6);
+  // "10 events in the next 7 days" beside today's date; links down to the events list
+  function renderWeek(events) {
+    var end = addDays(TODAY, 6), box = $("[data-glance-week]");
     var n = events.filter(function (e) { return e.end >= TODAY && e.date <= end; }).length;
-    $("[data-glance-week]").innerHTML = '<span class="glance-big">' + n + '</span><span class="glance-text"><small>Coming up</small><strong>' +
-      (n === 1 ? "Event" : "Events") + " in the next 7 days</strong><em>" + dShort(TODAY) + " – " + dShort(end) + "</em></span>";
+    box.innerHTML = '<span class="today-week-num">' + n + '</span><span class="today-week-text"><strong>' +
+      (n === 1 ? "event" : "events") + " in the next 7 days</strong><small>" + dShort(TODAY) + " – " + dShort(end) + "</small></span>";
+    box.hidden = false;
   }
 
   // Button labels: one link -> the default label; an English + a Vietnamese link -> "English" / "Tiếng Việt";
@@ -210,10 +203,10 @@
   function fail(key, sel, msg) { failed.push(key); var el = $(sel); if (el) el.innerHTML = '<p class="notice">' + msg + "</p>"; }
 
   Promise.all([
-    load("calendar").then(function (t) { var r = readCalendar(t); renderKeyDates(r); renderGlanceNext(r); })
-      .catch(function () { fail("calendar", "[data-keydates]", "Couldn’t load the school calendar right now."); $("[data-glance-next]").hidden = true; }),
-    load("events").then(function (t) { var ev = readEvents(t); renderEvents(ev); renderGlanceWeek(ev); })
-      .catch(function () { fail("events", "[data-events]", "Couldn’t load upcoming events right now."); $("[data-glance-week]").hidden = true; }),
+    load("calendar").then(function (t) { renderKeyDates(readCalendar(t)); })
+      .catch(function () { fail("calendar", "[data-keydates]", "Couldn’t load the school calendar right now."); }),
+    load("events").then(function (t) { var ev = readEvents(t); renderEvents(ev); renderWeek(ev); })
+      .catch(function () { fail("events", "[data-events]", "Couldn’t load upcoming events right now."); }),
     Promise.all([load("announcements"), H.loadCellLinks("announcements")])
       .then(function (x) { renderAnnouncements(readAnnouncements(x[0], x[1])); })
       .catch(function () { fail("announcements", "[data-announcements]", "Couldn’t load announcements right now."); })
