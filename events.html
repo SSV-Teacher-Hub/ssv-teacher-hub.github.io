@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>School Events · Teacher Hub · Sedbergh Vietnam</title>
+  <meta name="description" content="Upcoming events at Sedbergh Vietnam, month by month.">
+  <meta name="theme-color" content="#776756">
+  <link rel="icon" href="favicon.ico" sizes="16x16 32x32 48x48">
+  <link rel="icon" href="icon.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="events">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ================= Header ================= -->
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Teacher Hub, Sedbergh Vietnam">
+      <img src="assets/img/sedbergh-vietnam-white.png" alt="Sedbergh Vietnam" width="134" height="56">
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-name">Teacher Hub</span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="calendar.html">School Calendar</a>
+      <a href="events.html" aria-current="page">School Events</a>
+      <a href="index.html#resources">Resources</a>
+      <a href="index.html#faq">FAQ</a>
+      <a class="nav-mobile-only" href="index.html#contact">Who to ask</a>
+    </nav>
+    <a class="button header-button" href="index.html#contact">Who to ask</a>
+    <button class="menu-toggle" type="button" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main id="main">
+    <section class="page-hero">
+      <p class="eyebrow">Academic year <span data-ay>&nbsp;</span></p>
+      <h1>School Events</h1>
+      <p class="page-hero-sub">Assemblies, workshops, trips and house events, month by month.</p>
+    </section>
+
+    <section class="band band-paper cal-page">
+      <div class="cal-wrap">
+        <div class="cal-main">
+          <div class="cal-head">
+            <button class="cal-arrow" type="button" data-cal-prev aria-label="Previous month"></button>
+            <h2 data-cal-title aria-live="polite">&nbsp;</h2>
+            <button class="cal-arrow next" type="button" data-cal-next aria-label="Next month"></button>
+            <button class="button button-outline button-sm cal-today" type="button" data-cal-today>Today</button>
+          </div>
+          <div class="cal-grid" role="grid" data-cal-grid>
+            <div class="skeleton tall"></div>
+          </div>
+        </div>
+        <aside class="cal-side" aria-label="Choose a month">
+          <div class="year-switch" data-years></div>
+          <p class="ay-pill" data-ay-pill>&nbsp;</p>
+          <div class="month-picker" data-months></div>
+          <div class="month-list legend" data-legend>
+            <p class="eyebrow">Departments</p>
+          </div>
+        </aside>
+      </div>
+      <div class="ev-month">
+        <h2 data-list-title>Events</h2>
+        <div class="ev-list" data-month-list>
+          <div class="skeleton tall"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= Footer ================= -->
+  <footer class="site-footer">
+    <div class="footer-head">
+      <p class="footer-title">Teacher Hub</p>
+      <p class="footer-sub">Staff information · Sedbergh Vietnam</p>
+      <address>No 86, Road 23, Phu My Hung, Tan My Ward, HCMC</address>
+    </div>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="index.html">Home</a>
+      <a href="calendar.html">School Calendar</a>
+      <a href="events.html">School Events</a>
+      <a href="index.html#contact">Who to ask</a>
+    </nav>
+    <div class="footer-accreditations">
+      <img src="assets/img/sedbergh-accreditations-negative.png" alt="Sedbergh Vietnam accreditations" width="1046" height="120" loading="lazy">
+    </div>
+    <div class="footer-meta">
+      <span>© <span data-year>2026</span> Sedbergh Vietnam · Teacher Hub</span>
+      <span data-source></span>
+      <a href="#top">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="assets/js/hub.js"></script>
+  <script src="assets/js/calendar.js"></script>
+</body>
+</html>

@@ -4,6 +4,14 @@ Trang thông tin cho giáo viên và nhân viên Sedbergh Vietnam, cùng phong c
 [Centre of Excellence](https://coe-ssv.github.io/). Trang tĩnh, chạy thẳng trên GitHub Pages,
 **không cần Apps Script**: thông báo, lịch và sự kiện được đọc trực tiếp từ Google Sheet.
 
+## Các trang
+
+- `index.html` — trang chủ: thông báo, các mốc sắp tới, sự kiện 30 ngày tới, công cụ, FAQ, liên hệ.
+- `calendar.html` — **School Calendar**: lịch tháng tô màu theo tab Calendar, chọn năm 2026/2027 và tháng bên phải.
+- `events.html` — **School Events**: lịch tháng có từng sự kiện (tab Event) và danh sách chi tiết theo ngày bên dưới.
+
+Có thể mở thẳng một tháng: `calendar.html#2027-02`.
+
 ## Nội dung lấy từ đâu
 
 | Phần trên trang | Nguồn |
@@ -40,7 +48,9 @@ Trang tải từng tab bằng link xuất CSV của Google (`/export?format=csv&
 index.html              nội dung trang (sửa Resources, FAQ, Who to ask ở đây)
 config.js               ID Sheet, tên tab, link CSV, màu/nhãn bộ phận
 assets/css/style.css    giao diện (màu, font theo trang COE)
-assets/js/main.js       đọc CSV từ Sheet và hiển thị
+assets/js/hub.js        phần dùng chung: đọc CSV từ Sheet, xử lý ngày
+assets/js/home.js       trang chủ
+assets/js/calendar.js   trang School Calendar và School Events
 assets/img/             logo Sedbergh Vietnam
 data/demo/demo.js       dữ liệu mẫu (dùng với ?demo hoặc khi mở file bằng cách bấm đúp)
 ```
