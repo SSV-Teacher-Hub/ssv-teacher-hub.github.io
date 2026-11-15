@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Teacher Hub · SSV</title>
+  <meta name="description" content="Announcements, key dates, quick links and contacts for SSV teachers.">
+  <meta name="theme-color" content="#F7F4EE" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121614" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- ===== Header ===== -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top" aria-label="Teacher Hub, back to top">
+        <img src="assets/favicon.svg" alt="" width="34" height="34">
+        <span><strong>Teacher Hub</strong><small>SSV</small></span>
+      </a>
+      <nav class="site-nav" aria-label="Sections">
+        <a href="#news">Announcements</a>
+        <a href="#dates">Key dates</a>
+        <a href="#links">Quick links</a>
+        <a href="#help">Help</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="top">
+      <div class="wrap hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">For SSV teachers &amp; staff</p>
+          <h1>Everything you need for the school year, on one page.</h1>
+          <p class="lead">The latest announcements, upcoming dates and the links you use every day. Updated straight from the school office.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#news">Read the latest news</a>
+            <a class="btn" href="#dates">See what’s coming up</a>
+          </div>
+        </div>
+        <aside class="today-card" aria-label="Today">
+          <p class="today-label">Today</p>
+          <p class="today-date" data-today>—</p>
+          <div class="today-next" data-next></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== Announcements (from the Announcements tab) ===== -->
+    <section class="section" id="news" aria-labelledby="news-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Announcements</p>
+          <h2 id="news-title">What’s new</h2>
+        </div>
+        <div class="news" data-news>
+          <div class="placeholder"></div><div class="placeholder"></div><div class="placeholder"></div>
+        </div>
+        <div class="more" data-news-more hidden>
+          <button class="btn" type="button">Show older announcements</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Key dates (from the Calendar + Event tabs) ===== -->
+    <section class="section section-alt" id="dates" aria-labelledby="dates-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">School calendar</p>
+          <h2 id="dates-title">Key dates</h2>
+          <p class="section-sub">Holidays, PD days and what’s happening around school in the coming weeks.</p>
+        </div>
+        <div class="keydates" data-keydates></div>
+        <div class="timeline" data-events>
+          <div class="placeholder tall"></div>
+        </div>
+        <div class="more" data-events-more hidden>
+          <button class="btn" type="button">Show more dates</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Quick links =====
+         Sửa danh sách link ngay tại đây: mỗi thẻ <a class="link-card"> là một link.
+         Đổi href, tên, mô tả và emoji cho đúng với trường. -->
+    <section class="section" id="links" aria-labelledby="links-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow">Quick links</p>
+          <h2 id="links-title">The tools you use every day</h2>
+        </div>
+        <div class="links">
+          <a class="link-card" href="https://classroom.google.com" target="_blank" rel="noopener">
+            <span class="link-icon" aria-hidden="true">🎓</span>
+            <span><strong>Google Classroom</strong><small>Classes, assignments and feedback</small></span>
+          </a>
+          <a class="link-card" href="https://mail.google.com" target="_blank" rel="noopener">
+            <span class="link-icon" aria-hidden="true">✉️</span>
+            <span><strong>School email</strong><small>Gmail with your school account</small></span>
+          </a>
+          <a class="link-card" href="https://drive.google.com" target="_blank" rel="noopener">
+            <span class="link-icon" aria-hidden="true">📁</span>
+            <span><strong>Shared drive</strong><small>Lesson plans and department files</small></span>
+          </a>
+          <a class="link-card" href="https://calendar.google.com" target="_blank" rel="noopener">
+            <span class="link-icon" aria-hidden="true">📅</span>
+            <span><strong>Google Calendar</strong><small>Meetings, duties and room bookings</small></span>
+          </a>
+          <a class="link-card" href="https://forms.google.com" target="_blank" rel="noopener">
+            <span class="link-icon" aria-hidden="true">📝</span>
+            <span><strong>Leave request</strong><small>Submit at least 3 working days ahead</small></span>
+          </a>
+          <a class="link-card" href="https://forms.google.com" target="_blank" rel="noopener">
+            <span class="link-icon" aria-hidden="true">🛠️</span>
+            <span><strong>IT support</strong><small>Laptops, projectors and accounts</small></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Help: contacts + FAQ =====
+         Sửa tên, email, số máy lẻ và câu hỏi ngay tại đây. -->
+    <section class="section section-alt" id="help" aria-labelledby="help-title">
+      <div class="wrap help">
+        <div>
+          <div class="section-head">
+            <p class="eyebrow">Help</p>
+            <h2 id="help-title">Who to ask</h2>
+          </div>
+          <ul class="contacts">
+            <li>
+              <strong>Academic Office</strong>
+              <span>Timetables, cover, exams</span>
+              <a href="mailto:academic@your-school.edu.vn">academic@your-school.edu.vn</a>
+            </li>
+            <li>
+              <strong>Student Development Office</strong>
+              <span>Assemblies, house events, trips</span>
+              <a href="mailto:sdo@your-school.edu.vn">sdo@your-school.edu.vn</a>
+            </li>
+            <li>
+              <strong>Human Resources</strong>
+              <span>Contracts, leave, payroll</span>
+              <a href="mailto:hr@your-school.edu.vn">hr@your-school.edu.vn</a>
+            </li>
+            <li>
+              <strong>IT Support</strong>
+              <span>Devices, Wi-Fi, accounts</span>
+              <a href="mailto:it@your-school.edu.vn">it@your-school.edu.vn</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div class="section-head">
+            <p class="eyebrow">FAQ</p>
+            <h2>Common questions</h2>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>How do I request leave?</summary>
+              <p>Fill in the leave request form at least 3 working days before. Your line manager approves it by email and the Academic Office arranges cover.</p>
+            </details>
+            <details>
+              <summary>I’m sick today. What should I do?</summary>
+              <p>Message your line manager and the Academic Office before 7:00 AM, and upload cover work to your class folder if you can.</p>
+            </details>
+            <details>
+              <summary>When are lesson plans due?</summary>
+              <p>Weekly plans go into the shared drive by Friday 4:00 PM for the following week.</p>
+            </details>
+            <details>
+              <summary>Something in my classroom is broken.</summary>
+              <p>Send an IT support request with your room number. If a lesson starts in under 15 minutes, call IT directly.</p>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <span>© <span data-year></span> SSV Teacher Hub</span>
+      <span class="muted" data-updated></span>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
