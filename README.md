@@ -70,8 +70,8 @@ file 10 phút; không đổi số thì người vừa vào trang có thể nhậ
 
 Google Sites → **Insert → Embed → By URL** → dán `https://ssv-teacher-hub.github.io/` → chọn **Whole page** → Insert.
 
-- Trang tự nhận ra đang nằm trong khung nhúng và chuyển sang **bản gọn**: bỏ thanh menu nâu và chân trang
-  (Google Site đã có), ba trang thành tab nhẹ ở trên cùng, tiêu đề và khoảng cách nhỏ lại.
+- Trang tự nhận ra đang nằm trong khung nhúng và chuyển sang **bản gọn**: thanh nâu mỏng có logo Sedbergh Vietnam
+  và ba tab (Home · School Calendar · School Events), không có chân trang (Google Site đã có), tiêu đề và khoảng cách nhỏ lại.
   Mở thẳng trang (không qua khung) thì vẫn là bản đầy đủ như cũ.
 - Khung nhúng trong Google Sites có chiều cao cố định: **kéo khung cao lên** (cạnh dưới của khung) để ít phải cuộn bên trong.
 - Xem thử bản gọn mà không cần Google Sites: thêm `?embed` vào cuối địa chỉ, ví dụ `index.html?embed`.

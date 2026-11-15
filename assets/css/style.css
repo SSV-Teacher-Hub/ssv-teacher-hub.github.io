@@ -433,13 +433,22 @@ body[data-page="events"] .cal-cell { min-height: 118px; }
    ========================================================= */
 html.embed { --sec-x: clamp(20px, 4vw, 40px); --sec-y: clamp(32px, 4vw, 48px); scroll-padding-top: 16px; }
 
-.embed .site-header { position: static; height: auto; padding: 8px var(--sec-x) 0; gap: 0; background: var(--paper); color: var(--ink); border-bottom: 1px solid var(--line); }
-.embed .site-nav { display: flex; position: static; flex-direction: row; gap: 4px; margin: 0; padding: 0; background: none; border: 0; overflow: auto hidden; scrollbar-width: none; }
-.embed .site-nav a { flex: none; padding: 10px 14px 11px; border-bottom: 2px solid transparent; color: var(--muted); font-size: 14px; font-weight: 600; text-decoration: none; }
-.embed .site-nav a:first-child { padding-left: 0; }
-.embed .site-nav a:hover { color: var(--ink); }
-.embed .site-nav a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--gold); text-decoration: none; }
+.site-logo { display: none; }                 /* the logo shows only in the embedded top bar */
+.embed .site-header { position: static; height: 64px; padding: 0 var(--sec-x); gap: 24px; background: var(--grain-dark), var(--mocha); color: #fff; }
+.embed .site-logo { display: flex; flex: none; }
+.embed .site-logo img { height: 40px; width: auto; }
+.embed .site-nav { display: flex; position: static; align-self: stretch; flex-direction: row; gap: 4px; margin: 0 -12px 0 auto; padding: 0; background: none; border: 0; overflow: auto hidden; scrollbar-width: none; }
+.embed .site-nav a { flex: none; display: flex; align-items: center; padding: 2px 12px 0; border-bottom: 2px solid transparent; color: rgba(255, 255, 255, .82); font-size: 14px; font-weight: 600; text-decoration: none; }
+.embed .site-nav a:hover { color: #f0dcb4; }
+.embed .site-nav a[aria-current="page"] { color: #fff; border-bottom-color: var(--gold-hi); text-decoration: none; }
 .embed .menu-toggle, .embed .site-footer { display: none; }
+@media (max-width: 640px) {
+  .embed .site-header { height: 56px; gap: 12px; }
+  .embed .site-logo img { height: 32px; }
+  .embed .site-nav { margin-right: -8px; gap: 0; }
+  .embed .site-nav a { padding: 2px 8px 0; font-size: 13px; }
+  .embed .nav-long { display: none; }         /* "Calendar" / "Events" so the three tabs fit beside the logo */
+}
 
 .embed h2 { font-size: clamp(24px, 2.6vw, 32px); }
 .embed .band-head { margin-bottom: 24px; }
